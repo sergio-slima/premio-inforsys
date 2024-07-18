@@ -42,38 +42,37 @@
     <section id="partner-challenge">
         <div style="max-width: 1200px; margin: auto;">
             <h2>Desafio dos Parceiros</h2>
-            <h4>Versão: 2.0</h4>
             <p>Visite os stands dos nossos parceiros, capture os QR codes e traga as logos para o nosso stand para receber seu prêmio!</p>
             <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 50px;">
                 <div class="partner-space" data-partner="1">
                     <h3>Parceiro 1</h3>
                     <img id="logo-1" src="placeholder-logo1.png" alt="Parceiro 1" style="width: 100px; height: 100px;">
-                    <button onclick="startQRScanner(1)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
+                    <button onclick="requestCameraPermission(1)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
                 </div>
                 <div class="partner-space" data-partner="2">
                     <h3>Parceiro 2</h3>
                     <img id="logo-2" src="placeholder-logo2.png" alt="Parceiro 2" style="width: 100px; height: 100px;">
-                    <button onclick="startQRScanner(2)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
+                    <button onclick="requestCameraPermission(2)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
                 </div>
                 <div class="partner-space" data-partner="3">
                     <h3>Parceiro 3</h3>
                     <img id="logo-3" src="placeholder-logo3.png" alt="Parceiro 3" style="width: 100px; height: 100px;">
-                    <button onclick="startQRScanner(3)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
+                    <button onclick="requestCameraPermission(3)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
                 </div>
                 <div class="partner-space" data-partner="4">
                     <h3>Parceiro 4</h3>
                     <img id="logo-4" src="placeholder-logo4.png" alt="Parceiro 4" style="width: 100px; height: 100px;">
-                    <button onclick="startQRScanner(4)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
+                    <button onclick="requestCameraPermission(4)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
                 </div>
                 <div class="partner-space" data-partner="5">
                     <h3>Parceiro 5</h3>
                     <img id="logo-5" src="placeholder-logo5.png" alt="Parceiro 5" style="width: 100px; height: 100px;">
-                    <button onclick="startQRScanner(5)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
+                    <button onclick="requestCameraPermission(5)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
                 </div>
                 <div class="partner-space" data-partner="6">
                     <h3>Parceiro 6</h3>
                     <img id="logo-6" src="placeholder-logo6.png" alt="Parceiro 6" style="width: 100px; height: 100px;">
-                    <button onclick="startQRScanner(6)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
+                    <button onclick="requestCameraPermission(6)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
                 </div>
             </div>
         </div>
@@ -89,44 +88,47 @@
         let currentPartnerId = null;
         const qrReader = new Html5Qrcode("qr-reader");
 
-        function startQRScanner(partnerId) {
+        function requestCameraPermission(partnerId) {
             currentPartnerId = partnerId;
 
-            // Verificar permissão da câmera
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
                     stream.getTracks().forEach(track => track.stop()); // Parar a câmera após verificar a permissão
-                    qrReader.start(
-                        { facingMode: "environment" },
-                        {
-                            fps: 10,
-                            qrbox: { width: 250, height: 250 }
-                        },
-                        (decodedText, decodedResult) => {
-                            // Função chamada quando o QR Code é escaneado com sucesso
-                            const logoElement = document.getElementById('logo-' + currentPartnerId);
-                            logoElement.src = decodedText; // O texto decodificado deve ser a URL da logo
-                            logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
-                            qrReader.stop().then(ignore => {
-                                document.getElementById('qr-reader').style.display = 'none';
-                            }).catch(err => {
-                                console.error(err);
-                            });
-                        },
-                        (errorMessage) => {
-                            // Função chamada quando há erro na leitura do QR Code
-                            console.error(`Erro na leitura do QR Code: ${errorMessage}`);
-                        }
-                    ).catch(err => {
-                        console.error(`Erro ao iniciar o QR scanner: ${err}`);
-                    });
-
-                    document.getElementById('qr-reader').style.display = 'block';
+                    startQRScanner(); // Iniciar o scanner de QR code
                 })
                 .catch(err => {
                     console.error(`Erro ao obter permissão da câmera: ${err}`);
                     alert('É necessário permitir o acesso à câmera para escanear o QR code.');
                 });
+        }
+
+        function startQRScanner() {
+            qrReader.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                (decodedText, decodedResult) => {
+                    // Função chamada quando o QR Code é escaneado com sucesso
+                    const logoElement = document.getElementById('logo-' + currentPartnerId);
+                    logoElement.src = decodedText; // O texto decodificado deve ser a URL da logo
+                    logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
+                    qrReader.stop().then(ignore => {
+                        document.getElementById('qr-reader').style.display = 'none';
+                    }).catch(err => {
+                        console.error(err);
+                    });
+                },
+                (errorMessage) => {
+                    // Função chamada quando há erro na leitura do QR Code
+                    console.error(`Erro na leitura do QR Code: ${errorMessage}`);
+                }
+            ).catch(err => {
+                console.error(`Erro ao iniciar o QR scanner: ${err}`);
+            });
+
+            document.getElementById('qr-reader').style.display = 'block';
         }
     </script>
 </body>
