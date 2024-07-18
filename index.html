@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Prêmios | Inforsys</title>
+</head>
+<body>
+    <header style="background-color: #121212; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <img src="logo.png" alt="Inforsys Logo" style="height: 50px;">
+        <nav>
+            <ul style="display: flex; list-style: none; margin: 0; padding: 0;">
+                <li style="margin: 0 15px;"><a href="#home" style="color: #fff; text-decoration: none;">Home</a></li>
+                <li style="margin: 0 15px;"><a href="#about" style="color: #fff; text-decoration: none;">Sobre</a></li>
+                <li style="margin: 0 15px;"><a href="#services" style="color: #fff; text-decoration: none;">Serviços</a></li>
+                <li style="margin: 0 15px;"><a href="#testimonials" style="color: #fff; text-decoration: none;">Depoimentos</a></li>
+                <li style="margin: 0 15px;"><a href="#contact" style="color: #fff; text-decoration: none;">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="home" style="background-color: #1c1c1c; color: #fff; padding: 100px 20px; text-align: center;">
+        <h1>Bem-vindo à Inforsys</h1>
+        <p>24 anos trazendo soluções gerenciais e administrativas para empresas comerciais.</p>
+        <a href="#contact" style="background-color: #ff6600; color: #fff; padding: 15px 30px; text-decoration: none; border-radius: 5px;">Entre em Contato</a>
+    </section>
+
+    <!-- Seção de Desafio dos Parceiros -->
+    <section id="partner-challenge" style="background-color: #121212; color: #fff; padding: 100px 20px; text-align: center;">
+        <div style="max-width: 1200px; margin: auto;">
+            <h2>Desafio dos Parceiros</h2>
+            <p>Visite os stands dos nossos parceiros, capture os QR codes e traga as logos para o nosso stand para receber seu prêmio!</p>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 50px;">
+                <div class="partner-space" data-partner="1">
+                    <h3>Parceiro 1</h3>
+                    <img id="logo-1" src="placeholder-logo1.png" alt="Parceiro 1" style="width: 100px; height: 100px;">
+                    <button onclick="captureQRCode(1)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
+                </div>
+                <div class="partner-space" data-partner="2">
+                    <h3>Parceiro 2</h3>
+                    <img id="logo-2" src="placeholder-logo2.png" alt="Parceiro 2" style="width: 100px; height: 100px;">
+                    <button onclick="captureQRCode(2)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
+                </div>
+                <div class="partner-space" data-partner="3">
+                    <h3>Parceiro 3</h3>
+                    <img id="logo-3" src="placeholder-logo3.png" alt="Parceiro 3" style="width: 100px; height: 100px;">
+                    <button onclick="captureQRCode(3)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
+                </div>
+                <div class="partner-space" data-partner="4">
+                    <h3>Parceiro 4</h3>
+                    <img id="logo-4" src="placeholder-logo4.png" alt="Parceiro 4" style="width: 100px; height: 100px;">
+                    <button onclick="captureQRCode(4)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
+                </div>
+                <div class="partner-space" data-partner="5">
+                    <h3>Parceiro 5</h3>
+                    <img id="logo-5" src="placeholder-logo5.png" alt="Parceiro 5" style="width: 100px; height: 100px;">
+                    <button onclick="captureQRCode(5)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
+                </div>
+                <div class="partner-space" data-partner="6">
+                    <h3>Parceiro 6</h3>
+                    <img id="logo-6" src="placeholder-logo6.png" alt="Parceiro 6" style="width: 100px; height: 100px;">
+                    <button onclick="captureQRCode(6)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para Instruções -->
+    <div id="instructions-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 50px; box-sizing: border-box;">
+        <div style="max-width: 600px; margin: auto; background-color: #252525; padding: 20px; border-radius: 10px; text-align: center;">
+            <h2>Como Capturar o QR Code</h2>
+            <p>Use seu aplicativo de leitura de QR code ou a câmera do seu celular para escanear o QR code disponível no stand do parceiro.</p>
+            <button onclick="closeInstructions()" style="margin-top: 20px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Fechar</button>
+        </div>
+    </div>
+
+
+
+    
+    <section id="about" style="background-color: #252525; color: #ddd; padding: 100px 20px;">
+        <div style="max-width: 800px; margin: auto;">
+            <h2>Sobre a Inforsys</h2>
+            <p>Desde 2000, a Inforsys tem se dedicado a fornecer soluções de alta qualidade que facilitam a gestão e a administração de empresas comerciais. Nossa equipe de especialistas está comprometida em oferecer tecnologia de ponta e suporte excepcional.</p>
+        </div>
+    </section>
+    
+    <section id="services" style="background-color: #1c1c1c; color: #fff; padding: 100px 20px;">
+        <div style="max-width: 800px; margin: auto;">
+            <h2>Nossos Serviços</h2>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 20px;">
+                    <h3>Consultoria Gerencial</h3>
+                    <p>Orientação estratégica para otimizar a gestão da sua empresa.</p>
+                </li>
+                <li style="margin-bottom: 20px;">
+                    <h3>Sistemas de Automação</h3>
+                    <p>Automatize processos e melhore a eficiência operacional.</p>
+                </li>
+                <li style="margin-bottom: 20px;">
+                    <h3>Suporte Técnico</h3>
+                    <p>Assistência técnica contínua para garantir o funcionamento ideal dos sistemas.</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+    
+    <section id="testimonials" style="background-color: #252525; color: #ddd; padding: 100px 20px;">
+        <div style="max-width: 800px; margin: auto;">
+            <h2>O que nossos clientes dizem</h2>
+            <div>
+                <p>"A Inforsys transformou a maneira como gerenciamos nosso negócio. A equipe é incrível e o suporte é fenomenal!" - Cliente A</p>
+                <p>"Graças às soluções da Inforsys, conseguimos aumentar nossa eficiência e reduzir custos operacionais." - Cliente B</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" style="background-color: #1c1c1c; color: #fff; padding: 100px 20px;">
+        <div style="max-width: 800px; margin: auto;">
+            <h2>Contato</h2>
+            <form action="/enviar-mensagem" method="post">
+                <div style="margin-bottom: 20px;">
+                    <label for="nome" style="display: block; margin-bottom: 5px;">Nome</label>
+                    <input type="text" id="nome" name="nome" style="width: 100%; padding: 10px;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label for="email" style="display: block; margin-bottom: 5px;">Email</label>
+                    <input type="email" id="email" name="email" style="width: 100%; padding: 10px;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label for="mensagem" style="display: block; margin-bottom: 5px;">Mensagem</label>
+                    <textarea id="mensagem" name="mensagem" rows="5" style="width: 100%; padding: 10px;"></textarea>
+                </div>
+                <button type="submit" style="background-color: #ff6600; color: #fff; padding: 15px 30px; border: none; border-radius: 5px;">Enviar</button>
+            </form>
+        </div>
+    </section>
+    
+    <footer style="background-color: #121212; color: #777; padding: 20px; text-align: center;">
+        <p>&copy; 2024 Inforsys. Todos os direitos reservados.</p>
+    </footer>
+    
+    <script>
+        // Função para mostrar instruções
+        function showInstructions(partnerId) {
+            const modal = document.getElementById('instructions-modal');
+            modal.style.display = 'block';
+        }
+    
+        // Função para fechar instruções
+        function closeInstructions() {
+            const modal = document.getElementById('instructions-modal');
+            modal.style.display = 'none';
+        }
+    
+        // Função para simular a captura de QR code e trocar a logo do parceiro
+        function captureQRCode(partnerId) {
+            // Fechar instruções (se estiverem abertas)
+            closeInstructions();
+            
+            // Simular a captura de QR code e trocar a logo
+            const logos = {
+                1: 'logo-parceiro1.png',
+                2: 'logo-parceiro2.png',
+                3: 'logo-parceiro3.png',
+                4: 'logo-parceiro4.png',
+                5: 'logo-parceiro5.png',
+                6: 'logo-parceiro6.png'
+            };
+            const logoElement = document.getElementById('logo-' + partnerId);
+            logoElement.src = logos[partnerId];
+            logoElement.alt = 'Logo do Parceiro ' + partnerId;
+        }
+    </script>
+    
+    
+</body>
+</html>

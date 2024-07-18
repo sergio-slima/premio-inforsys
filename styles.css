@@ -1,0 +1,36 @@
+.partner-space {
+    background-color: #252525;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 10px;
+    width: 200px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.partner-space:hover {
+    transform: scale(1.05);
+}
+
+#instructions-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 50px;
+    box-sizing: border-box;
+}
+
+#instructions-modal div {
+    max-width: 600px;
+    margin: auto;
+    background-color: #252525;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
