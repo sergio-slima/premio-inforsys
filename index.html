@@ -29,8 +29,8 @@
             transform: scale(1.05);
         }
         #qr-reader {
-            width: 300px;
-            height: 300px;
+            width: 100%;
+            max-width: 400px;
         }
         #qr-reader-modal {
             display: none;
@@ -53,7 +53,7 @@
     <!-- Seção de Desafio dos Parceiros -->
     <section id="partner-challenge">
         <div style="max-width: 1200px; margin: auto;">
-            <h2>Desafio dos Parceiros 5.1</h2>
+            <h2>Desafio dos Parceiros 5.2</h2>
             <p>Visite os stands dos nossos parceiros, capture os QR codes e traga as logos para o nosso stand para receber seu prêmio!</p>
             <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 50px;">
                 <div class="partner-space" data-partner="1">
@@ -92,42 +92,45 @@
 
     <!-- Modal para o QR Code Reader -->
     <div id="qr-reader-modal">
-        <div id="qr-reader"></div>
+        <video id="qr-reader"></video>
     </div>
 
     <!-- Bibliotecas JavaScript -->
-    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
     <script>
         let currentPartnerId = null;
-        const qrReader = new Html5Qrcode("qr-reader");
+        let scanner = null;
 
         function startQRScanner(partnerId) {
             currentPartnerId = partnerId;
             document.getElementById('qr-reader-modal').classList.add('active');
 
-            qrReader.start(
-                { facingMode: "environment" },
-                {
-                    fps: 10,
-                    qrbox: 250
-                },
-                qrCodeMessage => {
-                    const logoElement = document.getElementById('logo-' + currentPartnerId);
-                    logoElement.src = qrCodeMessage;
-                    logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
+            scanner = new Instascan.Scanner({ video: document.getElementById('qr-reader') });
 
-                    qrReader.stop().then(() => {
-                        document.getElementById('qr-reader-modal').classList.remove('active');
-                    }).catch(err => {
-                        console.error(err);
-                    });
-                },
-                errorMessage => {
-                    console.error(errorMessage);
-                }
-            ).catch(err => {
-                console.error(err);
+            scanner.addListener('scan', function (content) {
+                const logoElement = document.getElementById('logo-' + currentPartnerId);
+                logoElement.src = content;
+                logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
+
+                stopQRScanner();
             });
+
+            Instascan.Camera.getCameras().then(function (cameras) {
+                if (cameras.length > 0) {
+                    scanner.start(cameras[0]);
+                } else {
+                    console.error('No cameras found.');
+                }
+            }).catch(function (e) {
+                console.error(e);
+            });
+        }
+
+        function stopQRScanner() {
+            if (scanner) {
+                scanner.stop();
+            }
+            document.getElementById('qr-reader-modal').classList.remove('active');
         }
     </script>
 </body>
