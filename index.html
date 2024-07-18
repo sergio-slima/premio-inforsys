@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio dos Parceiros 5.0</title>
+    <title>Desafio dos Parceiros</title>
     <style>
         body {
             background-color: #121212;
@@ -29,9 +29,8 @@
             transform: scale(1.05);
         }
         #qr-reader {
-            display: none;
-            width: 100%;
-            height: 100%;
+            width: 300px;
+            height: 300px;
         }
         #qr-reader-modal {
             display: none;
@@ -54,7 +53,7 @@
     <!-- Seção de Desafio dos Parceiros -->
     <section id="partner-challenge">
         <div style="max-width: 1200px; margin: auto;">
-            <h2>Desafio dos Parceiros</h2>
+            <h2>Desafio dos Parceiros 5.1</h2>
             <p>Visite os stands dos nossos parceiros, capture os QR codes e traga as logos para o nosso stand para receber seu prêmio!</p>
             <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 50px;">
                 <div class="partner-space" data-partner="1">
@@ -106,47 +105,29 @@
             currentPartnerId = partnerId;
             document.getElementById('qr-reader-modal').classList.add('active');
 
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-                .then(stream => {
-                    const videoElement = document.createElement('video');
-                    videoElement.srcObject = stream;
-                    videoElement.setAttribute("playsinline", true); // Required to tell iOS safari we don't want fullscreen
-                    videoElement.play();
-                    document.getElementById('qr-reader').appendChild(videoElement);
-                    requestAnimationFrame(tick);
+            qrReader.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: 250
+                },
+                qrCodeMessage => {
+                    const logoElement = document.getElementById('logo-' + currentPartnerId);
+                    logoElement.src = qrCodeMessage;
+                    logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
 
-                    function tick() {
-                        if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
-                            const canvasElement = document.createElement('canvas');
-                            const canvas = canvasElement.getContext("2d");
-                            canvasElement.height = videoElement.videoHeight;
-                            canvasElement.width = videoElement.videoWidth;
-                            canvas.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-
-                            const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-                            const code = jsQR(imageData.data, imageData.width, imageData.height, {
-                                inversionAttempts: "dontInvert",
-                            });
-
-                            if (code) {
-                                const logoElement = document.getElementById('logo-' + currentPartnerId);
-                                logoElement.src = code.data;
-                                logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
-
-                                qrReader.stop();
-                                stream.getTracks().forEach(track => track.stop());
-                                document.getElementById('qr-reader-modal').classList.remove('active');
-                            } else {
-                                requestAnimationFrame(tick);
-                            }
-                        } else {
-                            requestAnimationFrame(tick);
-                        }
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                });
+                    qrReader.stop().then(() => {
+                        document.getElementById('qr-reader-modal').classList.remove('active');
+                    }).catch(err => {
+                        console.error(err);
+                    });
+                },
+                errorMessage => {
+                    console.error(errorMessage);
+                }
+            ).catch(err => {
+                console.error(err);
+            });
         }
     </script>
 </body>
