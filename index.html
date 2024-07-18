@@ -42,6 +42,7 @@
     <section id="partner-challenge">
         <div style="max-width: 1200px; margin: auto;">
             <h2>Desafio dos Parceiros</h2>
+            <h4>Versão: 2.0</h4>
             <p>Visite os stands dos nossos parceiros, capture os QR codes e traga as logos para o nosso stand para receber seu prêmio!</p>
             <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 50px;">
                 <div class="partner-space" data-partner="1">
@@ -86,37 +87,46 @@
     <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script>
         let currentPartnerId = null;
+        const qrReader = new Html5Qrcode("qr-reader");
 
         function startQRScanner(partnerId) {
             currentPartnerId = partnerId;
-            const qrReader = new Html5Qrcode("qr-reader");
 
-            qrReader.start(
-                { facingMode: "environment" },
-                {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 }
-                },
-                (decodedText, decodedResult) => {
-                    // Função chamada quando o QR Code é escaneado com sucesso
-                    const logoElement = document.getElementById('logo-' + currentPartnerId);
-                    logoElement.src = decodedText; // O texto decodificado deve ser a URL da logo
-                    logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
-                    qrReader.stop().then(ignore => {
-                        document.getElementById('qr-reader').style.display = 'none';
-                    }).catch(err => {
-                        console.error(err);
+            // Verificar permissão da câmera
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    stream.getTracks().forEach(track => track.stop()); // Parar a câmera após verificar a permissão
+                    qrReader.start(
+                        { facingMode: "environment" },
+                        {
+                            fps: 10,
+                            qrbox: { width: 250, height: 250 }
+                        },
+                        (decodedText, decodedResult) => {
+                            // Função chamada quando o QR Code é escaneado com sucesso
+                            const logoElement = document.getElementById('logo-' + currentPartnerId);
+                            logoElement.src = decodedText; // O texto decodificado deve ser a URL da logo
+                            logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
+                            qrReader.stop().then(ignore => {
+                                document.getElementById('qr-reader').style.display = 'none';
+                            }).catch(err => {
+                                console.error(err);
+                            });
+                        },
+                        (errorMessage) => {
+                            // Função chamada quando há erro na leitura do QR Code
+                            console.error(`Erro na leitura do QR Code: ${errorMessage}`);
+                        }
+                    ).catch(err => {
+                        console.error(`Erro ao iniciar o QR scanner: ${err}`);
                     });
-                },
-                (errorMessage) => {
-                    // Função chamada quando há erro na leitura do QR Code
-                    console.error(`Erro na leitura do QR Code: ${errorMessage}`);
-                }
-            ).catch(err => {
-                console.error(`Erro ao iniciar o QR scanner: ${err}`);
-            });
 
-            document.getElementById('qr-reader').style.display = 'block';
+                    document.getElementById('qr-reader').style.display = 'block';
+                })
+                .catch(err => {
+                    console.error(`Erro ao obter permissão da câmera: ${err}`);
+                    alert('É necessário permitir o acesso à câmera para escanear o QR code.');
+                });
         }
     </script>
 </body>
