@@ -85,26 +85,35 @@
     <!-- Bibliotecas JavaScript -->
     <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script>
-        // Função para iniciar o scanner de QR Code
-        function startQRScanner(partnerId) {
-            const qrReader = new Html5Qrcode("qr-reader");
-            const qrReaderResults = document.getElementById("qr-reader-results");
+        let currentPartnerId = null;
 
-            qrReader.render((decodedText, decodedResult) => {
-                // Função chamada quando o QR Code é escaneado com sucesso
-                qrReaderResults.innerHTML = `QR Code lido: ${decodedText}`;
-                qrReader.stop().then(ignore => {
-                    // Substituir a logo do parceiro
-                    const logoElement = document.getElementById('logo-' + partnerId);
+        function startQRScanner(partnerId) {
+            currentPartnerId = partnerId;
+            const qrReader = new Html5Qrcode("qr-reader");
+
+            qrReader.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                (decodedText, decodedResult) => {
+                    // Função chamada quando o QR Code é escaneado com sucesso
+                    const logoElement = document.getElementById('logo-' + currentPartnerId);
                     logoElement.src = decodedText; // O texto decodificado deve ser a URL da logo
-                    logoElement.alt = 'Logo do Parceiro ' + partnerId;
-                    document.getElementById('qr-reader').style.display = 'none';
-                }).catch(err => {
-                    console.log(err);
-                });
-            }, (errorMessage) => {
-                // Função chamada quando há erro na leitura do QR Code
-                console.log(`Erro na leitura do QR Code: ${errorMessage}`);
+                    logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
+                    qrReader.stop().then(ignore => {
+                        document.getElementById('qr-reader').style.display = 'none';
+                    }).catch(err => {
+                        console.error(err);
+                    });
+                },
+                (errorMessage) => {
+                    // Função chamada quando há erro na leitura do QR Code
+                    console.error(`Erro na leitura do QR Code: ${errorMessage}`);
+                }
+            ).catch(err => {
+                console.error(`Erro ao iniciar o QR scanner: ${err}`);
             });
 
             document.getElementById('qr-reader').style.display = 'block';
