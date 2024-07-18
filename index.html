@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio dos Parceiros 4.0</title>
+    <title>Desafio dos Parceiros 5.0</title>
     <style>
         body {
             background-color: #121212;
@@ -30,10 +30,23 @@
         }
         #qr-reader {
             display: none;
-            margin-top: 20px;
+            width: 100%;
+            height: 100%;
         }
-        #qr-reader-results {
-            margin-top: 20px;
+        #qr-reader-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        #qr-reader-modal.active {
+            display: flex;
         }
     </style>
 </head>
@@ -78,9 +91,10 @@
         </div>
     </section>
 
-    <!-- Div para o QR Code Reader -->
-    <div id="qr-reader" style="width: 300px; height: 300px; margin: auto;"></div>
-    <div id="qr-reader-results"></div>
+    <!-- Modal para o QR Code Reader -->
+    <div id="qr-reader-modal">
+        <div id="qr-reader"></div>
+    </div>
 
     <!-- Bibliotecas JavaScript -->
     <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
@@ -90,7 +104,7 @@
 
         function startQRScanner(partnerId) {
             currentPartnerId = partnerId;
-            document.getElementById('qr-reader').style.display = 'block';
+            document.getElementById('qr-reader-modal').classList.add('active');
 
             navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
                 .then(stream => {
@@ -98,6 +112,7 @@
                     videoElement.srcObject = stream;
                     videoElement.setAttribute("playsinline", true); // Required to tell iOS safari we don't want fullscreen
                     videoElement.play();
+                    document.getElementById('qr-reader').appendChild(videoElement);
                     requestAnimationFrame(tick);
 
                     function tick() {
@@ -120,7 +135,7 @@
 
                                 qrReader.stop();
                                 stream.getTracks().forEach(track => track.stop());
-                                document.getElementById('qr-reader').style.display = 'none';
+                                document.getElementById('qr-reader-modal').classList.remove('active');
                             } else {
                                 requestAnimationFrame(tick);
                             }
