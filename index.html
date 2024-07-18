@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio dos Parceiros</title>
+    <title>Desafio dos Parceiros 4.0</title>
     <style>
         body {
             background-color: #121212;
@@ -41,7 +41,7 @@
     <!-- Seção de Desafio dos Parceiros -->
     <section id="partner-challenge">
         <div style="max-width: 1200px; margin: auto;">
-            <h2>Desafio dos Parceiros 3.0</h2>
+            <h2>Desafio dos Parceiros</h2>
             <p>Visite os stands dos nossos parceiros, capture os QR codes e traga as logos para o nosso stand para receber seu prêmio!</p>
             <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 50px;">
                 <div class="partner-space" data-partner="1">
@@ -92,37 +92,46 @@
             currentPartnerId = partnerId;
             document.getElementById('qr-reader').style.display = 'block';
 
-            Html5Qrcode.getCameras().then(devices => {
-                if (devices && devices.length) {
-                    let cameraId = devices[0].id;
-                    qrReader.start(
-                        cameraId,
-                        {
-                            fps: 10,
-                            qrbox: { width: 250, height: 250 }
-                        },
-                        (decodedText, decodedResult) => {
-                            const logoElement = document.getElementById('logo-' + currentPartnerId);
-                            logoElement.src = decodedText;
-                            logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
-                            qrReader.stop().then(ignore => {
-                                document.getElementById('qr-reader').style.display = 'none';
-                            }).catch(err => {
-                                console.error(err);
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                .then(stream => {
+                    const videoElement = document.createElement('video');
+                    videoElement.srcObject = stream;
+                    videoElement.setAttribute("playsinline", true); // Required to tell iOS safari we don't want fullscreen
+                    videoElement.play();
+                    requestAnimationFrame(tick);
+
+                    function tick() {
+                        if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
+                            const canvasElement = document.createElement('canvas');
+                            const canvas = canvasElement.getContext("2d");
+                            canvasElement.height = videoElement.videoHeight;
+                            canvasElement.width = videoElement.videoWidth;
+                            canvas.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+                            const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+                            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                                inversionAttempts: "dontInvert",
                             });
-                        },
-                        (errorMessage) => {
-                            console.error(`Erro na leitura do QR Code: ${errorMessage}`);
+
+                            if (code) {
+                                const logoElement = document.getElementById('logo-' + currentPartnerId);
+                                logoElement.src = code.data;
+                                logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
+
+                                qrReader.stop();
+                                stream.getTracks().forEach(track => track.stop());
+                                document.getElementById('qr-reader').style.display = 'none';
+                            } else {
+                                requestAnimationFrame(tick);
+                            }
+                        } else {
+                            requestAnimationFrame(tick);
                         }
-                    ).catch(err => {
-                        console.error(`Erro ao iniciar o QR scanner: ${err}`);
-                    });
-                } else {
-                    console.error("Nenhuma câmera encontrada.");
-                }
-            }).catch(err => {
-                console.error(`Erro ao obter câmeras: ${err}`);
-            });
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                });
         }
     </script>
 </body>
