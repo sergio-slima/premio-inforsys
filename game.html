@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="./img/brain.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="../css/game.css">
+    <script defer src="../js/game.js"></script>
+
+    <title>Inforsys Game</title>
+
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        #partner-challenge {
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 250px;
+        }
+        .partner-space {
+            background-color: #252525;
+            padding: 10px 10px 20px;
+            margin: 10px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+        .partner-space:hover {
+            transform: scale(1.05);
+        }
+        .player {
+            text-align: center;
+            justify-self: center;
+            font-size: 10px;
+        }
+        .descript {
+            color: #4095B0;  
+            font-size: 1rem;  
+        }
+        .partner-space h3 {
+            color: #4095B0;  
+            font-size: 1.5rem;  
+        }
+        .partner-space .button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #4095B0;
+            color: #fff;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+        }
+        #qr-reader {
+            width: 100%;
+            max-width: 400px;
+        }
+        #qr-reader-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #qr-reader-modal.active {
+            display: flex;
+        }
+        #close-modal-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4095B0;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }     
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo {
+            width: 100px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Seção de Desafio dos Parceiros -->
+    <section id="partner-challenge">
+        <div style="max-width: 1200px; margin: auto;">            
+            <img class="logo" src="./img/logo.png" alt="logo inforsys">
+
+            <div><span class="player"></span></div>
+            
+            <h2>Desafio dos Parceiros</h2>
+            <p class="descript">Visite os stands dos nossos parceiros, capture os QR-Codes e traga as logos de todos os parceiros para o Stand da Inforsys para receber seu prêmio!</p>
+            <p>🏃 Corra! Prêmios Limitados. 🎁</p>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 50px;">
+                <div class="partner-space" data-partner="1">
+                    <h3>Espaço Animal</h3>
+                    <img id="logo-1" src="./img/placeholder-logo.png" alt="Parceiro 1" style="width: 250px; height: 200px;">
+                    <button onclick="startQRScanner(1)" class="button">Clique para capturar</button>
+                </div>
+                <div class="partner-space" data-partner="2">
+                    <h3>Exatta Contabilidade</h3>
+                    <img id="logo-2" src="./img/placeholder-logo.png" alt="Parceiro 2" style="width: 250px; height: 200px;">
+                    <button onclick="startQRScanner(2)" class="button">Clique para capturar</button>
+                </div>
+                <div class="partner-space" data-partner="3">
+                    <h3>Fer7</h3>
+                    <img id="logo-3" src="./img/placeholder-logo.png" alt="Parceiro 3" style="width: 250px; height: 200px;">
+                    <button onclick="startQRScanner(3)" class="button">Clique para capturar</button>
+                </div>
+                <div class="partner-space" data-partner="4">
+                    <h3>Imperial Jóias</h3>
+                    <img id="logo-4" src="./img/placeholder-logo.png" alt="Parceiro 4" style="width: 250px; height: 200px;">
+                    <button onclick="startQRScanner(4)" class="button">Clique para capturar</button>
+                </div>
+                <div class="partner-space" data-partner="5">
+                    <h3>Nutri Pet Rações</h3>
+                    <img id="logo-5" src="./img/placeholder-logo.png" alt="Parceiro 5" style="width: 250px; height: 200px;">
+                    <button onclick="startQRScanner(5)" class="button">Clique para capturar</button>
+                </div>
+                <div class="partner-space" data-partner="6">
+                    <h3>Planalto</h3>
+                    <img id="logo-6" src="./img/placeholder-logo.png" alt="Parceiro 6" style="width: 250px; height: 200px;">
+                    <button onclick="startQRScanner(6)" class="button">Clique para capturar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para o QR Code Reader -->
+    <div id="qr-reader-modal">
+        <video id="qr-reader"></video>
+        <button id="close-modal-button" onclick="stopQRScanner()">Cancelar</button>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <img src="./img/brasao.png" alt="Logo da Inforsys" class="footer-logo">
+            <p>Desenvolvido por Sergio - Analista de Sistemas</p>
+            <p class="descript">&copy; 2024 Inforsys</p>
+        </div>
+    </footer>
+
+    <!-- Bibliotecas JavaScript -->
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script>
+        let currentPartnerId = null;
+        let scanner = null;
+        const spanPlayer = document.querySelector('.player');
+
+        function startQRScanner(partnerId) {
+            currentPartnerId = partnerId;
+            document.getElementById('qr-reader-modal').classList.add('active');
+
+            scanner = new Instascan.Scanner({ video: document.getElementById('qr-reader'), mirror: false });
+
+            scanner.addListener('scan', function (content) {
+                const logoElement = document.getElementById('logo-' + currentPartnerId);
+                logoElement.src = content;
+                logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
+
+                stopQRScanner();
+            });
+
+            Instascan.Camera.getCameras().then(function (cameras) {
+                if (cameras.length > 0) {
+                    const backCamera = cameras.find(camera => camera.name.toLowerCase().includes('back')) || cameras[0];
+                    scanner.start(backCamera);
+                } else {
+                    console.error('No cameras found.');
+                }
+            }).catch(function (e) {
+                console.error(e);
+            });
+        }
+
+        function stopQRScanner() {
+            if (scanner) {
+                scanner.stop();
+            }
+            document.getElementById('qr-reader-modal').classList.remove('active');
+        }
+        window.onload = () => {
+            spanPlayer.innerHTML = 'Bem vindo(a) '+localStorage.getItem('player');
+        }
+    </script>
+</body>
+</html>

@@ -1,149 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio dos Parceiros</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #fff;
-            font-family: Arial, sans-serif;
-        }
-        #partner-challenge {
-            padding: 50px 20px;
-            text-align: center;
-        }
-        .partner-space {
-            background-color: #252525;
-            padding: 20px;
-            margin: 10px;
-            border-radius: 10px;
-            width: 200px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s;
-            display: inline-block;
-        }
-        .partner-space:hover {
-            transform: scale(1.05);
-        }
-        #qr-reader {
-            width: 100%;
-            max-width: 400px;
-        }
-        #qr-reader-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        #qr-reader-modal.active {
-            display: flex;
-        }
-        #close-modal-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #ff6600;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <!-- Seção de Desafio dos Parceiros -->
-    <section id="partner-challenge">
-        <div style="max-width: 1200px; margin: auto;">
-            <h2>Desafio dos Parceiros 5.6</h2>
-            <p>Visite os stands dos nossos parceiros, capture os QR codes e traga as logos para o nosso stand para receber seu prêmio!</p>
-            <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 50px;">
-                <div class="partner-space" data-partner="1">
-                    <h3>Parceiro 1</h3>
-                    <img id="logo-1" src="placeholder-logo1.png" alt="Parceiro 1" style="width: 100px; height: 100px;">
-                    <button onclick="startQRScanner(1)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
-                </div>
-                <div class="partner-space" data-partner="2">
-                    <h3>Parceiro 2</h3>
-                    <img id="logo-2" src="placeholder-logo2.png" alt="Parceiro 2" style="width: 100px; height: 100px;">
-                    <button onclick="startQRScanner(2)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
-                </div>
-                <div class="partner-space" data-partner="3">
-                    <h3>Parceiro 3</h3>
-                    <img id="logo-3" src="placeholder-logo3.png" alt="Parceiro 3" style="width: 100px; height: 100px;">
-                    <button onclick="startQRScanner(3)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
-                </div>
-                <div class="partner-space" data-partner="4">
-                    <h3>Parceiro 4</h3>
-                    <img id="logo-4" src="placeholder-logo4.png" alt="Parceiro 4" style="width: 100px; height: 100px;">
-                    <button onclick="startQRScanner(4)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
-                </div>
-                <div class="partner-space" data-partner="5">
-                    <h3>Parceiro 5</h3>
-                    <img id="logo-5" src="placeholder-logo5.png" alt="Parceiro 5" style="width: 100px; height: 100px;">
-                    <button onclick="startQRScanner(5)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
-                </div>
-                <div class="partner-space" data-partner="6">
-                    <h3>Parceiro 6</h3>
-                    <img id="logo-6" src="placeholder-logo6.png" alt="Parceiro 6" style="width: 100px; height: 100px;">
-                    <button onclick="startQRScanner(6)" style="margin-top: 10px; padding: 10px 20px; background-color: #ff6600; color: #fff; border: none; border-radius: 5px;">Clique para capturar</button>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Modal para o QR Code Reader -->
-    <div id="qr-reader-modal">
-        <video id="qr-reader"></video>
-        <button id="close-modal-button" onclick="stopQRScanner()">Fechar</button>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/login.css">
+
+  <script defer src="./js/login.js"></script>
+  <link rel="shortcut icon" href="./img/brain.png" type="image/x-icon">
+  <title>Inforsys Game | Login</title>
+</head>
+
+<body>
+
+  <form class="login-form">
+
+    <div class="login__header">
+      <img src="./img/brasao.png" alt="Inforsys logo">
+      <h1>Desafio dos Parceiros</h1>
     </div>
 
-    <!-- Bibliotecas JavaScript -->
-    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    <script>
-        let currentPartnerId = null;
-        let scanner = null;
+    <input type="text" placeholder="Name" class="login__input">
+    <button type="submit" class="login__button" disabled>Jogar</button>
 
-        function startQRScanner(partnerId) {
-            currentPartnerId = partnerId;
-            document.getElementById('qr-reader-modal').classList.add('active');
+  </form>
 
-            scanner = new Instascan.Scanner({ video: document.getElementById('qr-reader'), mirror: false });
-
-            scanner.addListener('scan', function (content) {
-                const logoElement = document.getElementById('logo-' + currentPartnerId);
-                logoElement.src = content;
-                logoElement.alt = 'Logo do Parceiro ' + currentPartnerId;
-
-                stopQRScanner();
-            });
-
-            Instascan.Camera.getCameras().then(function (cameras) {
-                if (cameras.length > 0) {
-                    const backCamera = cameras.find(camera => camera.name.toLowerCase().includes('back')) || cameras[0];
-                    scanner.start(backCamera);
-                } else {
-                    console.error('No cameras found.');
-                }
-            }).catch(function (e) {
-                console.error(e);
-            });
-        }
-
-        function stopQRScanner() {
-            if (scanner) {
-                scanner.stop();
-            }
-            document.getElementById('qr-reader-modal').classList.remove('active');
-        }
-    </script>
 </body>
+
 </html>
