@@ -31,7 +31,6 @@
         #qr-reader {
             width: 100%;
             max-width: 400px;
-            transform: scaleX(-1); /* Espelha o vídeo horizontalmente */
         }
         #qr-reader-modal {
             display: none;
@@ -44,9 +43,19 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
         #qr-reader-modal.active {
             display: flex;
+        }
+        #close-modal-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff6600;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -54,7 +63,7 @@
     <!-- Seção de Desafio dos Parceiros -->
     <section id="partner-challenge">
         <div style="max-width: 1200px; margin: auto;">
-            <h2>Desafio dos Parceiros</h2>
+            <h2>Desafio dos Parceiros 5.6</h2>
             <p>Visite os stands dos nossos parceiros, capture os QR codes e traga as logos para o nosso stand para receber seu prêmio!</p>
             <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 50px;">
                 <div class="partner-space" data-partner="1">
@@ -94,6 +103,7 @@
     <!-- Modal para o QR Code Reader -->
     <div id="qr-reader-modal">
         <video id="qr-reader"></video>
+        <button id="close-modal-button" onclick="stopQRScanner()">Fechar</button>
     </div>
 
     <!-- Bibliotecas JavaScript -->
@@ -106,7 +116,7 @@
             currentPartnerId = partnerId;
             document.getElementById('qr-reader-modal').classList.add('active');
 
-            scanner = new Instascan.Scanner({ video: document.getElementById('qr-reader') });
+            scanner = new Instascan.Scanner({ video: document.getElementById('qr-reader'), mirror: false });
 
             scanner.addListener('scan', function (content) {
                 const logoElement = document.getElementById('logo-' + currentPartnerId);
