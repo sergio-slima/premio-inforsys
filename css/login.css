@@ -19,10 +19,8 @@
   margin-bottom: 40px;
 }
 
-
-
 .login__header h1 {
-  color: #333;
+  color: #fff;
   font-size: 1.5em; 
   line-height: 1.5em;
   letter-spacing: 2px;
@@ -32,7 +30,7 @@
 .login__input {
   border: 2px solid #333;
   border-radius: 8px;
-  color: #333;
+  color: #eee;
   font-size: 1em;
   margin-bottom: 15px;
   max-width: 300px;
@@ -42,7 +40,7 @@
 }
 
 .login__button {
-  background-color: #00b5cc;
+  background-color: #4095B0;
   border: 3px solid #b2df28;
   border-radius: 8px;
   color: #fff;
@@ -54,8 +52,8 @@
 }
 
 .login__button:disabled {
-  background-color: #eee;
+  background-color: #999;
   border: 2px solid #969595;
-  color: #aaa;
+  color: #eee;
   cursor: auto;
 }
